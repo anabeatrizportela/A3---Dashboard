@@ -1,0 +1,18 @@
+# Power BI — binário, não dá diff e gera conflito que o git não resolve.
+# O que se versiona é o que gera o relatório: sql/, powerbi/dax/ e powerbi/tema/.
+*.pbix
+*.pbit
+
+# Seed gerado por scripts/gerar_populacao_ibge.py (a fonte é a API do IBGE).
+sql/seed/04_POPULACAO_IBGE.sql
+
+# Malha do mapa, baixada do IBGE e convertida no mapshaper (arquivo grande).
+powerbi/mapa/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
