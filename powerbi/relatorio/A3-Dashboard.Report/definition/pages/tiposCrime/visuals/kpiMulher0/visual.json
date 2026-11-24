@@ -1,0 +1,68 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "kpiMulher0",
+  "position": {
+    "x": 536,
+    "y": 430,
+    "z": 9000,
+    "height": 100,
+    "width": 232,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Estupro"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Estupro",
+              "nativeQueryRef": "Estupro",
+              "displayName": "Estupro"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

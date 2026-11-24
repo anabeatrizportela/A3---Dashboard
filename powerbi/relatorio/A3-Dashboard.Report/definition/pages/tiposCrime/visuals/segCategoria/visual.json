@@ -1,0 +1,73 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "segCategoria",
+  "position": {
+    "x": 1148,
+    "y": 12,
+    "z": 5000,
+    "height": 56,
+    "width": 112,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_categoria_ocorrencia"
+                    }
+                  },
+                  "Property": "CAOC_NM_CATEGORIA"
+                }
+              },
+              "queryRef": "seg_categoria_ocorrencia.CAOC_NM_CATEGORIA",
+              "nativeQueryRef": "CAOC_NM_CATEGORIA",
+              "displayName": "Categoria"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "syncGroup": {
+      "groupName": "categoria",
+      "fieldChanges": true,
+      "filterChanges": true
+    }
+  }
+}

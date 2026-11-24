@@ -1,0 +1,73 @@
+table seg_periodo
+	lineageTag: 7351aa4a-20c2-4a07-9ca5-9f47f99b13ad
+	dataCategory: Time
+
+	column PERI_ID_PERIODO
+		dataType: int64
+		formatString: 0
+		lineageTag: da5f9699-b6f3-4a99-917d-d5fed92f0ef8
+		summarizeBy: none
+		sourceColumn: PERI_ID_PERIODO
+
+		annotation SummarizationSetBy = Automatic
+
+	column PERI_NR_MES
+		dataType: int64
+		formatString: 0
+		lineageTag: f735be41-0a44-4782-a727-4ead15257dad
+		summarizeBy: none
+		sourceColumn: PERI_NR_MES
+
+		annotation SummarizationSetBy = Automatic
+
+	column PERI_NR_ANO
+		dataType: int64
+		formatString: 0
+		lineageTag: a029c56a-9510-450e-81ee-e0ca0a5a5bee
+		summarizeBy: none
+		sourceColumn: PERI_NR_ANO
+
+		annotation SummarizationSetBy = Automatic
+
+	column PERI_DT_REFERENCIA
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: 16e4aae0-21a4-40f2-a672-3f80a633be5f
+		summarizeBy: none
+		sourceColumn: PERI_DT_REFERENCIA
+
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column PERI_NM_MES
+		dataType: string
+		lineageTag: dbeb67c8-0164-4613-b722-430bd6f029ba
+		summarizeBy: none
+		sourceColumn: PERI_NM_MES
+		sortByColumn: PERI_NR_MES
+
+		annotation SummarizationSetBy = Automatic
+
+	column PERI_NR_TRIMESTRE
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b4ba633-fa1d-40e2-b664-36bb39b7eb5d
+		summarizeBy: none
+		sourceColumn: PERI_NR_TRIMESTRE
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_periodo = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_periodo = Fonte{[Schema="seg_dashboard",Item="seg_periodo"]}[Data]
+				in
+				    seg_dashboard_seg_periodo
+
+	annotation PBI_ResultType = Table
+

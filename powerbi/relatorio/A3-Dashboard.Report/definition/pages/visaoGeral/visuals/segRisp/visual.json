@@ -1,0 +1,73 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "segRisp",
+  "position": {
+    "x": 1032,
+    "y": 12,
+    "z": 4000,
+    "height": 56,
+    "width": 112,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_risp"
+                    }
+                  },
+                  "Property": "RISP_NM_RISP"
+                }
+              },
+              "queryRef": "seg_risp.RISP_NM_RISP",
+              "nativeQueryRef": "RISP_NM_RISP",
+              "displayName": "RISP"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "syncGroup": {
+      "groupName": "risp",
+      "fieldChanges": true,
+      "filterChanges": true
+    }
+  }
+}

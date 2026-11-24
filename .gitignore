@@ -3,6 +3,11 @@
 *.pbix
 *.pbit
 
+# Projeto Power BI (.pbip): versiona o texto, nunca o cache de dados e as
+# preferencias locais que o Power BI Desktop grava em .pbi/.
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
 # Seed gerado por scripts/gerar_populacao_ibge.py (a fonte é a API do IBGE).
 sql/seed/04_POPULACAO_IBGE.sql
 

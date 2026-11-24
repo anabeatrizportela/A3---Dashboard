@@ -1,0 +1,75 @@
+table seg_municipio
+	lineageTag: 205a5b87-6519-406e-a11d-487442a3af10
+
+	column MUNI_ID_MUNICIPIO
+		dataType: int64
+		formatString: 0
+		lineageTag: fc9f96bc-62f0-4a3d-9c31-975e1797237d
+		summarizeBy: none
+		sourceColumn: MUNI_ID_MUNICIPIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column MUNI_CD_IBGE
+		dataType: int64
+		formatString: 0
+		lineageTag: 59484cb4-1143-4739-ab70-5c78ceea0810
+		summarizeBy: none
+		sourceColumn: MUNI_CD_IBGE
+
+		annotation SummarizationSetBy = Automatic
+
+	column MUNI_NM_MUNICIPIO
+		dataType: string
+		lineageTag: 9824f23a-55fd-47ae-8196-51fdd20de21c
+		summarizeBy: none
+		sourceColumn: MUNI_NM_MUNICIPIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGI_ID_REGIAO
+		dataType: int64
+		formatString: 0
+		lineageTag: a352c82e-aa0d-496a-9652-d61af85f70ff
+		summarizeBy: none
+		sourceColumn: REGI_ID_REGIAO
+
+		annotation SummarizationSetBy = Automatic
+
+	column MUNI_FL_SITUAC
+		dataType: string
+		lineageTag: 5e969528-475c-48a5-a543-de771a095525
+		summarizeBy: none
+		sourceColumn: MUNI_FL_SITUAC
+
+		annotation SummarizationSetBy = Automatic
+
+	column MUNI_QT_POPULACAO
+		dataType: int64
+		formatString: 0
+		lineageTag: bf714a29-7137-4daa-b17f-8c1d90e94c70
+		summarizeBy: sum
+		sourceColumn: MUNI_QT_POPULACAO
+
+		annotation SummarizationSetBy = Automatic
+
+	column MUNI_AA_POPULACAO
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e62b190-5e8f-4e74-812b-4fcf950f3592
+		summarizeBy: none
+		sourceColumn: MUNI_AA_POPULACAO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_municipio = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_municipio = Fonte{[Schema="seg_dashboard",Item="seg_municipio"]}[Data]
+				in
+				    seg_dashboard_seg_municipio
+
+	annotation PBI_ResultType = Table
+

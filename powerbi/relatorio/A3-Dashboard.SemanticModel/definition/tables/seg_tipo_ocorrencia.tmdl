@@ -1,0 +1,64 @@
+table seg_tipo_ocorrencia
+	lineageTag: 86ccc447-4c44-4911-8789-d9ca3becbeec
+
+	column TIOC_ID_TIPO_OCORRENCIA
+		dataType: int64
+		formatString: 0
+		lineageTag: 1d625dc9-8bc1-44af-a695-ffd36c5a2d33
+		summarizeBy: none
+		sourceColumn: TIOC_ID_TIPO_OCORRENCIA
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIOC_CD_TIPO_OCORRENCIA
+		dataType: string
+		lineageTag: b819a24b-7f55-4623-84a1-fbc3cfd50133
+		summarizeBy: none
+		sourceColumn: TIOC_CD_TIPO_OCORRENCIA
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIOC_NM_TIPO_OCORRENCIA
+		dataType: string
+		lineageTag: c3e92b3e-3300-4a65-b0ff-c06f39821a82
+		summarizeBy: none
+		sourceColumn: TIOC_NM_TIPO_OCORRENCIA
+
+		annotation SummarizationSetBy = Automatic
+
+	column CAOC_ID_CATEGORIA_OCORRENCIA
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c70cc77-c28c-4e8b-8197-7124a55d31c3
+		summarizeBy: none
+		sourceColumn: CAOC_ID_CATEGORIA_OCORRENCIA
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIOC_FL_SITUAC
+		dataType: string
+		lineageTag: b67722c3-72d1-46a4-a366-418618fc416f
+		summarizeBy: none
+		sourceColumn: TIOC_FL_SITUAC
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIOC_FL_AGREGADO
+		dataType: string
+		lineageTag: 0f128d59-4f44-42d5-812a-661caaf91447
+		summarizeBy: none
+		sourceColumn: TIOC_FL_AGREGADO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_tipo_ocorrencia = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_tipo_ocorrencia = Fonte{[Schema="seg_dashboard",Item="seg_tipo_ocorrencia"]}[Data]
+				in
+				    seg_dashboard_seg_tipo_ocorrencia
+
+	annotation PBI_ResultType = Table
+

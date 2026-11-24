@@ -1,0 +1,68 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "kpiMulher1",
+  "position": {
+    "x": 780,
+    "y": 430,
+    "z": 10000,
+    "height": 100,
+    "width": 232,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Feminicidio"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Feminicidio",
+              "nativeQueryRef": "Feminicidio",
+              "displayName": "Feminicídio"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

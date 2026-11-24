@@ -1,0 +1,132 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "barrasTipos",
+  "position": {
+    "x": 24,
+    "y": 84,
+    "z": 6000,
+    "height": 604,
+    "width": 500,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_tipo_ocorrencia"
+                    }
+                  },
+                  "Property": "TIOC_NM_TIPO_OCORRENCIA"
+                }
+              },
+              "queryRef": "seg_tipo_ocorrencia.TIOC_NM_TIPO_OCORRENCIA",
+              "nativeQueryRef": "TIOC_NM_TIPO_OCORRENCIA",
+              "displayName": "Tipo"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Ocorrencias"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Ocorrencias",
+              "nativeQueryRef": "Ocorrencias",
+              "displayName": "Ocorrências"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "seg_ocorrencia_mensal"
+                  }
+                },
+                "Property": "Ocorrencias"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Ocorrências por tipo de crime'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sem os tipos que são totais de outros tipos'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "tabelaMunicipios",
+  "position": {
+    "x": 24,
+    "y": 84,
+    "z": 6000,
+    "height": 604,
+    "width": 610,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_municipio"
+                    }
+                  },
+                  "Property": "MUNI_NM_MUNICIPIO"
+                }
+              },
+              "queryRef": "seg_municipio.MUNI_NM_MUNICIPIO",
+              "nativeQueryRef": "MUNI_NM_MUNICIPIO",
+              "displayName": "Município"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Populacao (por sede)"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Populacao (por sede)",
+              "nativeQueryRef": "Populacao (por sede)",
+              "displayName": "População"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Letalidade violenta (por sede)"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Letalidade violenta (por sede)",
+              "nativeQueryRef": "Letalidade violenta (por sede)",
+              "displayName": "Letalidade"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Taxa de letalidade violenta (100 mil)"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Taxa de letalidade violenta (100 mil)",
+              "nativeQueryRef": "Taxa de letalidade violenta (100 mil)",
+              "displayName": "Letalidade / 100 mil"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Roubos (por sede)"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Roubos (por sede)",
+              "nativeQueryRef": "Roubos (por sede)",
+              "displayName": "Roubos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Taxa de roubos (100 mil)"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Taxa de roubos (100 mil)",
+              "nativeQueryRef": "Taxa de roubos (100 mil)",
+              "displayName": "Roubos / 100 mil"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "seg_ocorrencia_mensal"
+                  }
+                },
+                "Property": "Taxa de letalidade violenta (100 mil)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Municípios'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Taxas por 100 mil habitantes, ordenadas pela letalidade'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

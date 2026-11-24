@@ -1,0 +1,73 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "segMes",
+  "position": {
+    "x": 800,
+    "y": 12,
+    "z": 2000,
+    "height": 56,
+    "width": 112,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_periodo"
+                    }
+                  },
+                  "Property": "PERI_NM_MES"
+                }
+              },
+              "queryRef": "seg_periodo.PERI_NM_MES",
+              "nativeQueryRef": "PERI_NM_MES",
+              "displayName": "Mês"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "syncGroup": {
+      "groupName": "mes",
+      "fieldChanges": true,
+      "filterChanges": true
+    }
+  }
+}

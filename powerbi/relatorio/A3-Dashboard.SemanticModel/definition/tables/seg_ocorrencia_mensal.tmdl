@@ -1,0 +1,546 @@
+table seg_ocorrencia_mensal
+	lineageTag: d2466657-2538-4471-b39e-0fbf9d80b583
+
+	measure '_Ocorrencias brutas' = SUM ( seg_ocorrencia_mensal[OCME_QT_OCORRENCIA] )
+		formatString: #,0
+		isHidden
+		displayFolder: 00 Base
+		lineageTag: 4934470b-8584-40b3-ba32-cfef0ca6dff3
+
+	measure Ocorrencias =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				KEEPFILTERS ( seg_tipo_ocorrencia[TIOC_FL_AGREGADO] = "N" ),
+				KEEPFILTERS ( seg_categoria_ocorrencia[CAOC_NM_CATEGORIA] <> "Atividade policial" )
+			)
+		formatString: #,0
+		displayFolder: 00 Base
+		lineageTag: e339ec27-e0ee-491d-95cc-de2f3f7b8e1f
+
+	measure 'Atividade policial' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_categoria_ocorrencia[CAOC_NM_CATEGORIA] = "Atividade policial",
+				seg_tipo_ocorrencia[TIOC_FL_AGREGADO] = "N"
+			)
+		formatString: #,0
+		displayFolder: 00 Base
+		lineageTag: 47709ad5-d17d-4fca-a98e-99667b921f50
+
+	measure 'Total de BOs' = SUM ( seg_registro_mensal[REME_QT_REGISTRO_OCORRENCIAS] )
+		formatString: #,0
+		displayFolder: 00 Base
+		lineageTag: 21515435-e236-4234-8d52-ed2d085edd22
+
+	measure 'Qtd delegacias' = DISTINCTCOUNT ( seg_registro_mensal[CISP_ID_CISP] )
+		formatString: #,0
+		displayFolder: 00 Base
+		lineageTag: 1f100014-25cf-49ef-9692-02c6dd3fb688
+
+	measure 'Qtd municipios' =
+			CALCULATE (
+				DISTINCTCOUNT ( seg_cisp_municipio[MUNI_ID_MUNICIPIO] ),
+				seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+			)
+		formatString: #,0
+		displayFolder: 00 Base
+		lineageTag: 8c8d39ec-dd3c-4afd-9f1d-984bceb033b6
+
+	measure 'Letalidade violenta' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "letalidade_violenta"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 56f6b11f-2929-464b-a299-b77bd9394b55
+
+	measure 'Mortes por intervencao do Estado' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "hom_por_interv_policial"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 4b3b9e51-b0dc-4bde-a913-9387b0144839
+
+	measure Roubos =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_categoria_ocorrencia[CAOC_NM_CATEGORIA] = "Roubos",
+				seg_tipo_ocorrencia[TIOC_FL_AGREGADO] = "N"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: ae39c2c0-e596-4e6e-8be8-aa7d2e797dd0
+
+	measure Furtos =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "total_furtos"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: be7798d5-1746-4006-9ef6-e3383c673a7e
+
+	measure Estelionato =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "estelionato"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 4071c9e9-87d8-4e09-a32d-4deee564c6e5
+
+	measure CVLI =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA]
+					IN { "hom_doloso", "lesao_corp_morte", "latrocinio", "feminicidio" }
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 98eaaf2a-ab25-41d8-8341-823ff5712740
+
+	measure 'Homicidio doloso' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "hom_doloso"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 6e0867fa-5616-4d4f-b9d3-140aafbca8df
+
+	measure '% Letalidade por intervencao' = DIVIDE ( [Mortes por intervencao do Estado], [Letalidade violenta] )
+		formatString: 0.0%
+		displayFolder: 10 KPIs
+		lineageTag: 81410181-1a03-46db-9f9a-6e894dafba61
+
+	measure Feminicidio =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "feminicidio"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 6c8b9549-85d8-4ac9-9170-85a17fd5586c
+
+	measure 'Tentativa de feminicidio' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "tentativa_feminicidio"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 0a50c013-f1be-4cf8-803d-2b5b97c66e76
+
+	measure Estupro =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "estupro"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 68465989-cc95-450d-88e2-76d7e26f1785
+
+	measure 'Prisoes em flagrante' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "apf"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 099f43a1-7804-4bb1-94cf-254fe47ca393
+
+	measure 'Mandados de prisao cumpridos' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "cmp"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 163c18c0-0aee-4e9b-99a0-d0cc174defa8
+
+	measure 'Veiculos recuperados' =
+			CALCULATE (
+				[_Ocorrencias brutas],
+				REMOVEFILTERS ( seg_tipo_ocorrencia ),
+				REMOVEFILTERS ( seg_categoria_ocorrencia ),
+				seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "recuperacao_veiculos"
+			)
+		formatString: #,0
+		displayFolder: 10 KPIs
+		lineageTag: 06bdf7b6-50e6-4b3c-b3a4-7f8bbffe6347
+
+	measure 'Letalidade violenta (mes anterior)' =
+			CALCULATE (
+				[Letalidade violenta],
+				PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+			)
+		formatString: #,0
+		displayFolder: 20 Tempo
+		lineageTag: 1e894028-9e2f-4cc1-9f49-bf801fa36654
+
+	measure 'Letalidade violenta (variacao %)' =
+			VAR Atual = [Letalidade violenta]
+			VAR Anterior = [Letalidade violenta (mes anterior)]
+			RETURN
+				DIVIDE ( Atual - Anterior, Anterior )
+		formatString: 0.0%
+		displayFolder: 20 Tempo
+		lineageTag: 89cc304f-8e9c-4e1a-b91f-fcc51e1a3f00
+
+	measure 'Mortes por intervencao do Estado (mes anterior)' =
+			CALCULATE (
+				[Mortes por intervencao do Estado],
+				PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+			)
+		formatString: #,0
+		displayFolder: 20 Tempo
+		lineageTag: 33e5a94b-46bd-4ef0-8db9-77daa4cb02f3
+
+	measure 'Mortes por intervencao do Estado (variacao %)' =
+			VAR Atual = [Mortes por intervencao do Estado]
+			VAR Anterior = [Mortes por intervencao do Estado (mes anterior)]
+			RETURN
+				DIVIDE ( Atual - Anterior, Anterior )
+		formatString: 0.0%
+		displayFolder: 20 Tempo
+		lineageTag: d455c598-cdc2-460a-9e18-410bd57579b2
+
+	measure 'Roubos (mes anterior)' =
+			CALCULATE (
+				[Roubos],
+				PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+			)
+		formatString: #,0
+		displayFolder: 20 Tempo
+		lineageTag: 3d026287-8b7a-460a-89e3-497cd167c2ba
+
+	measure 'Roubos (variacao %)' =
+			VAR Atual = [Roubos]
+			VAR Anterior = [Roubos (mes anterior)]
+			RETURN
+				DIVIDE ( Atual - Anterior, Anterior )
+		formatString: 0.0%
+		displayFolder: 20 Tempo
+		lineageTag: 7b34819b-6c81-4820-b881-c48b3373a780
+
+	measure 'Furtos (mes anterior)' =
+			CALCULATE (
+				[Furtos],
+				PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+			)
+		formatString: #,0
+		displayFolder: 20 Tempo
+		lineageTag: bfd6c3e5-4778-4476-be27-87ffd18b2674
+
+	measure 'Furtos (variacao %)' =
+			VAR Atual = [Furtos]
+			VAR Anterior = [Furtos (mes anterior)]
+			RETURN
+				DIVIDE ( Atual - Anterior, Anterior )
+		formatString: 0.0%
+		displayFolder: 20 Tempo
+		lineageTag: c3b3ae29-0ac9-4d21-bd39-b622a4fdb74b
+
+	measure 'Estelionato (mes anterior)' =
+			CALCULATE (
+				[Estelionato],
+				PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+			)
+		formatString: #,0
+		displayFolder: 20 Tempo
+		lineageTag: 0709c5d7-a9ad-4a91-bcf7-a6a0df64fec8
+
+	measure 'Estelionato (variacao %)' =
+			VAR Atual = [Estelionato]
+			VAR Anterior = [Estelionato (mes anterior)]
+			RETURN
+				DIVIDE ( Atual - Anterior, Anterior )
+		formatString: 0.0%
+		displayFolder: 20 Tempo
+		lineageTag: daf29856-4a49-4055-8342-228976c05e44
+
+	measure 'Total de BOs (mes anterior)' =
+			CALCULATE (
+				[Total de BOs],
+				PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+			)
+		formatString: #,0
+		displayFolder: 20 Tempo
+		lineageTag: ea343671-3e1a-4758-93d3-dd4980a97831
+
+	measure 'Total de BOs (variacao %)' =
+			VAR Atual = [Total de BOs]
+			VAR Anterior = [Total de BOs (mes anterior)]
+			RETURN
+				DIVIDE ( Atual - Anterior, Anterior )
+		formatString: 0.0%
+		displayFolder: 20 Tempo
+		lineageTag: faaf670d-a906-4901-b223-524c690caeeb
+
+	measure 'Rotulo do pico de letalidade' =
+			VAR MesesVisiveis = ALLSELECTED ( seg_periodo[PERI_DT_REFERENCIA] )
+			VAR MaiorValor =
+				MAXX ( MesesVisiveis, [Letalidade violenta] )
+			RETURN
+				IF ( [Letalidade violenta] = MaiorValor, [Letalidade violenta] )
+		formatString: #,0
+		displayFolder: 20 Tempo
+		lineageTag: 2aa03c74-af19-4e7b-9aa2-602372b51f33
+
+	measure 'Letalidade violenta (media mensal)' =
+			AVERAGEX (
+				VALUES ( seg_periodo[PERI_DT_REFERENCIA] ),
+				[Letalidade violenta]
+			)
+		formatString: #,0.0
+		displayFolder: 20 Tempo
+		lineageTag: c25a9032-6f81-49b0-b935-85ca4003c812
+
+	measure 'Ocorrencias (por sede)' =
+			CALCULATE (
+				[Ocorrencias],
+				seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+			)
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 63496780-0535-422f-af9f-3ee1fcad46c6
+
+	measure 'Letalidade violenta (por sede)' =
+			CALCULATE (
+				[Letalidade violenta],
+				seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+			)
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 0127b40c-6ec9-46eb-a99c-0377763a7c71
+
+	measure 'Roubos (por sede)' =
+			CALCULATE (
+				[Roubos],
+				seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+			)
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 1254effa-8921-4026-b271-489449f8a234
+
+	measure 'Furtos (por sede)' =
+			CALCULATE (
+				[Furtos],
+				seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+			)
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 96007606-86bb-4ee2-9f27-0c27e9a3f56f
+
+	measure 'Total de BOs (por sede)' =
+			CALCULATE (
+				[Total de BOs],
+				seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+			)
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 12b820cc-1e31-4770-8d71-44641331beaf
+
+	measure 'Letalidade violenta (duplicacao da ponte)' =
+			VAR SemFiltro = [Letalidade violenta]
+			VAR ComSede = [Letalidade violenta (por sede)]
+			RETURN
+				SemFiltro - ComSede
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 95a6607b-7c48-498e-998a-66e5a0c599d6
+
+	measure 'Posicao da delegacia (letalidade)' =
+			IF (
+				NOT ISBLANK ( [Letalidade violenta] ),
+				RANKX (
+					ALLSELECTED ( seg_cisp[CISP_NM_CISP] ),
+					[Letalidade violenta],
+					,
+					DESC,
+					DENSE
+				)
+			)
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 5ad48623-9841-4bee-8119-baeae6fd339e
+
+	measure 'Esta no top 10 (letalidade)' = IF ( [Posicao da delegacia (letalidade)] <= 10, 1, 0 )
+		formatString: #,0
+		displayFolder: 30 Territorio
+		lineageTag: 8cd4713e-af55-49cf-bb6b-5050560f04e9
+
+	measure '% Crime patrimonial' =
+			VAR Patrimonial =
+				CALCULATE (
+					[Ocorrencias],
+					KEEPFILTERS (
+						seg_categoria_ocorrencia[CAOC_NM_CATEGORIA]
+							IN { "Roubos", "Furtos", "Outros crimes patrimoniais" }
+					)
+				)
+			VAR Tudo =
+				CALCULATE ( [Ocorrencias], REMOVEFILTERS ( seg_categoria_ocorrencia ) )
+			RETURN
+				DIVIDE ( Patrimonial, Tudo )
+		formatString: 0.0%
+		displayFolder: 30 Territorio
+		lineageTag: 6aca62aa-80e6-4781-8245-c86c668d7167
+
+	measure Populacao = SUM ( seg_municipio[MUNI_QT_POPULACAO] )
+		formatString: #,0
+		displayFolder: 40 Taxas
+		lineageTag: 6b183d3e-5baf-4464-9ba3-9041cac9b6ed
+
+	measure 'Populacao (por sede)' =
+			CALCULATE (
+				[Populacao],
+				seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+			)
+		formatString: #,0
+		displayFolder: 40 Taxas
+		lineageTag: 2fdb790c-ca20-406a-8c02-45fc75bb9449
+
+	measure 'Municipios sem populacao' =
+			CALCULATE (
+				COUNTROWS ( seg_municipio ),
+				ISBLANK ( seg_municipio[MUNI_QT_POPULACAO] )
+			)
+		formatString: #,0
+		displayFolder: 40 Taxas
+		lineageTag: 6e2f6805-f1c2-4acf-8075-917fbbde5a02
+
+	measure 'Taxa de letalidade violenta (100 mil)' =
+			DIVIDE (
+				[Letalidade violenta (por sede)],
+				[Populacao (por sede)]
+			) * 100000
+		formatString: #,0.0
+		displayFolder: 40 Taxas
+		lineageTag: bae73924-bf78-4b94-87a0-172355644df3
+
+	measure 'Taxa de roubos (100 mil)' =
+			DIVIDE (
+				[Roubos (por sede)],
+				[Populacao (por sede)]
+			) * 100000
+		formatString: #,0.0
+		displayFolder: 40 Taxas
+		lineageTag: 770b0e8e-c7f0-4219-b4c1-3efaea9a8f1f
+
+	measure 'Taxa de furtos (100 mil)' =
+			DIVIDE (
+				[Furtos (por sede)],
+				[Populacao (por sede)]
+			) * 100000
+		formatString: #,0.0
+		displayFolder: 40 Taxas
+		lineageTag: f1afde87-bef4-48d6-b9c8-2bdc463ee1b1
+
+	measure 'Taxa de BOs (100 mil)' =
+			DIVIDE (
+				[Total de BOs (por sede)],
+				[Populacao (por sede)]
+			) * 100000
+		formatString: #,0.0
+		displayFolder: 40 Taxas
+		lineageTag: 4ac3df8b-73a2-400c-9456-af080b709e3e
+
+	measure 'Taxa de letalidade do estado (100 mil)' =
+			CALCULATE (
+				[Taxa de letalidade violenta (100 mil)],
+				REMOVEFILTERS ( seg_municipio ),
+				REMOVEFILTERS ( seg_regiao ),
+				REMOVEFILTERS ( seg_cisp ),
+				REMOVEFILTERS ( seg_aisp ),
+				REMOVEFILTERS ( seg_risp )
+			)
+		formatString: #,0.0
+		displayFolder: 40 Taxas
+		lineageTag: cd0f91e6-0843-4e9f-bf59-eb332b672ff2
+
+	measure 'Letalidade vs estado' =
+			VAR Local = [Taxa de letalidade violenta (100 mil)]
+			VAR Estado = [Taxa de letalidade do estado (100 mil)]
+			RETURN
+				DIVIDE ( Local - Estado, Estado )
+		formatString: 0.0%
+		displayFolder: 40 Taxas
+		lineageTag: 63b6475e-6152-4b47-9d05-4b2e73e05877
+
+	column OCME_ID_OCORRENCIA_MENSAL
+		dataType: int64
+		formatString: 0
+		lineageTag: f80d4e53-7f71-45d6-89a3-7196f99f2293
+		summarizeBy: none
+		sourceColumn: OCME_ID_OCORRENCIA_MENSAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column REME_ID_REGISTRO_MENSAL
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ed437e5-43f8-459f-8a9f-3b4c75fa06f7
+		summarizeBy: none
+		sourceColumn: REME_ID_REGISTRO_MENSAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIOC_ID_TIPO_OCORRENCIA
+		dataType: int64
+		formatString: 0
+		lineageTag: e9be5cbb-a321-49bf-a1b3-0e36cde9d818
+		summarizeBy: none
+		sourceColumn: TIOC_ID_TIPO_OCORRENCIA
+
+		annotation SummarizationSetBy = Automatic
+
+	column OCME_QT_OCORRENCIA
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b302d63-eba3-41b6-b1e1-48ff0f14a64f
+		summarizeBy: sum
+		sourceColumn: OCME_QT_OCORRENCIA
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_ocorrencia_mensal = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_ocorrencia_mensal = Fonte{[Schema="seg_dashboard",Item="seg_ocorrencia_mensal"]}[Data]
+				in
+				    seg_dashboard_seg_ocorrencia_mensal
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "matrizRisp",
+  "position": {
+    "x": 646,
+    "y": 84,
+    "z": 7000,
+    "height": 360,
+    "width": 610,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_risp"
+                    }
+                  },
+                  "Property": "RISP_NM_RISP"
+                }
+              },
+              "queryRef": "seg_risp.RISP_NM_RISP",
+              "nativeQueryRef": "RISP_NM_RISP",
+              "displayName": "RISP"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_aisp"
+                    }
+                  },
+                  "Property": "AISP_NM_AISP"
+                }
+              },
+              "queryRef": "seg_aisp.AISP_NM_AISP",
+              "nativeQueryRef": "AISP_NM_AISP",
+              "displayName": "AISP"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_cisp"
+                    }
+                  },
+                  "Property": "CISP_NM_CISP"
+                }
+              },
+              "queryRef": "seg_cisp.CISP_NM_CISP",
+              "nativeQueryRef": "CISP_NM_CISP",
+              "displayName": "Delegacia"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Letalidade violenta"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Letalidade violenta",
+              "nativeQueryRef": "Letalidade violenta",
+              "displayName": "Letalidade"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Roubos"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Roubos",
+              "nativeQueryRef": "Roubos",
+              "displayName": "Roubos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Furtos"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Furtos",
+              "nativeQueryRef": "Furtos",
+              "displayName": "Furtos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Total de BOs"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Total de BOs",
+              "nativeQueryRef": "Total de BOs",
+              "displayName": "BOs"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Áreas policiais: RISP → AISP → delegacia'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Clique no + para abrir cada nível'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

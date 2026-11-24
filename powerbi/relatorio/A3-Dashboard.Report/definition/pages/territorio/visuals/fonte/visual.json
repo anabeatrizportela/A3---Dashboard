@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "fonte",
+  "position": {
+    "x": 24,
+    "y": 694,
+    "z": 9000,
+    "height": 22,
+    "width": 1232,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Fonte: ISP-RJ, base de evolução mensal por CISP (jan–dez 2025). População: IBGE, Censo 2022. Totais por município e região contam cada delegacia só no seu município-sede.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "8pt",
+                      "color": "#7B8794"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

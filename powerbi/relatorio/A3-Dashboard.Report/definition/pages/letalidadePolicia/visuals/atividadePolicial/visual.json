@@ -1,0 +1,127 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "atividadePolicial",
+  "position": {
+    "x": 24,
+    "y": 448,
+    "z": 12000,
+    "height": 240,
+    "width": 1232,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_periodo"
+                    }
+                  },
+                  "Property": "PERI_NM_MES"
+                }
+              },
+              "queryRef": "seg_periodo.PERI_NM_MES",
+              "nativeQueryRef": "PERI_NM_MES",
+              "displayName": "Mês"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Prisoes em flagrante"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Prisoes em flagrante",
+              "nativeQueryRef": "Prisoes em flagrante",
+              "displayName": "Prisões em flagrante"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Mandados de prisao cumpridos"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Mandados de prisao cumpridos",
+              "nativeQueryRef": "Mandados de prisao cumpridos",
+              "displayName": "Mandados de prisão cumpridos"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Veiculos recuperados"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Veiculos recuperados",
+              "nativeQueryRef": "Veiculos recuperados",
+              "displayName": "Veículos recuperados"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "seg_periodo"
+                  }
+                },
+                "Property": "PERI_NM_MES"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Atividade policial por mês'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["seg_aisp","seg_cisp","seg_categoria_ocorrencia","seg_cisp_municipio","seg_municipio","seg_periodo","seg_regiao","seg_ocorrencia_mensal","seg_registro_mensal","seg_risp","seg_tipo_ocorrencia"]
+
+ref table seg_aisp
+ref table seg_cisp
+ref table seg_categoria_ocorrencia
+ref table seg_cisp_municipio
+ref table seg_municipio
+ref table seg_periodo
+ref table seg_regiao
+ref table seg_ocorrencia_mensal
+ref table seg_registro_mensal
+ref table seg_risp
+ref table seg_tipo_ocorrencia
+
+ref cultureInfo pt-BR
+

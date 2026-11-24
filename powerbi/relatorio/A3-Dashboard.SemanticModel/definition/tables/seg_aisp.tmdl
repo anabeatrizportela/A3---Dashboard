@@ -1,0 +1,65 @@
+table seg_aisp
+	lineageTag: c15e1e13-59ec-4251-93d3-d7b1ee9abb5f
+
+	column AISP_ID_AISP
+		dataType: int64
+		formatString: 0
+		lineageTag: 023d781b-6ab7-4ddb-bb46-5b93634092b2
+		summarizeBy: none
+		sourceColumn: AISP_ID_AISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column AISP_NR_AISP
+		dataType: int64
+		formatString: 0
+		lineageTag: c10cd175-0544-40cb-9c5d-72ac1f486870
+		summarizeBy: none
+		sourceColumn: AISP_NR_AISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column AISP_NM_AISP
+		dataType: string
+		lineageTag: 0dacdf20-11a1-4dfe-bfbe-af4b3d37530a
+		summarizeBy: none
+		sourceColumn: AISP_NM_AISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column AISP_DS_AREA
+		dataType: string
+		lineageTag: a0571dc1-bc08-4e19-9455-472bc4f00282
+		summarizeBy: none
+		sourceColumn: AISP_DS_AREA
+
+		annotation SummarizationSetBy = Automatic
+
+	column RISP_ID_RISP
+		dataType: int64
+		formatString: 0
+		lineageTag: 1da53ba8-4b62-4045-85ef-601febd4d281
+		summarizeBy: none
+		sourceColumn: RISP_ID_RISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column AISP_FL_SITUAC
+		dataType: string
+		lineageTag: b7e7019a-8640-401f-b373-9fc9ebd845f8
+		summarizeBy: none
+		sourceColumn: AISP_FL_SITUAC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_aisp = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_aisp = Fonte{[Schema="seg_dashboard",Item="seg_aisp"]}[Data]
+				in
+				    seg_dashboard_seg_aisp
+
+	annotation PBI_ResultType = Table
+

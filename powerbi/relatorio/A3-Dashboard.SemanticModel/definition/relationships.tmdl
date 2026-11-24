@@ -1,0 +1,40 @@
+relationship AutoDetected_af69bfec-e007-4672-8fe0-abe435cc9536
+	fromColumn: seg_registro_mensal.AISP_ID_AISP
+	toColumn: seg_aisp.AISP_ID_AISP
+
+relationship AutoDetected_3f3e27cd-ff3d-4786-be01-df010073fe39
+	fromColumn: seg_aisp.RISP_ID_RISP
+	toColumn: seg_risp.RISP_ID_RISP
+
+relationship AutoDetected_1105c5e9-bda7-47a9-94f4-a36b478525de
+	crossFilteringBehavior: bothDirections
+	fromColumn: seg_cisp_municipio.CISP_ID_CISP
+	toColumn: seg_cisp.CISP_ID_CISP
+
+relationship AutoDetected_f888eb5c-b045-43bb-92cc-176fbd919bc2
+	fromColumn: seg_registro_mensal.CISP_ID_CISP
+	toColumn: seg_cisp.CISP_ID_CISP
+
+relationship AutoDetected_8ef2320a-0013-4c2f-a160-a0105eb7cabb
+	fromColumn: seg_tipo_ocorrencia.CAOC_ID_CATEGORIA_OCORRENCIA
+	toColumn: seg_categoria_ocorrencia.CAOC_ID_CATEGORIA_OCORRENCIA
+
+relationship AutoDetected_119406f2-cb6c-4274-ad11-9b88e283f98e
+	fromColumn: seg_cisp_municipio.MUNI_ID_MUNICIPIO
+	toColumn: seg_municipio.MUNI_ID_MUNICIPIO
+
+relationship AutoDetected_20ddd571-4bea-48bd-a7e3-dc9c6a01d150
+	fromColumn: seg_municipio.REGI_ID_REGIAO
+	toColumn: seg_regiao.REGI_ID_REGIAO
+
+relationship AutoDetected_3dcfd212-9fde-4f5d-9812-bd1a0a6abdea
+	fromColumn: seg_registro_mensal.PERI_ID_PERIODO
+	toColumn: seg_periodo.PERI_ID_PERIODO
+
+relationship AutoDetected_53fcd9aa-1704-4c0a-8f7a-64e0eac53f2f
+	fromColumn: seg_ocorrencia_mensal.REME_ID_REGISTRO_MENSAL
+	toColumn: seg_registro_mensal.REME_ID_REGISTRO_MENSAL
+
+relationship AutoDetected_dc617b3a-6761-4d97-85d4-1bc334d4018b
+	fromColumn: seg_ocorrencia_mensal.TIOC_ID_TIPO_OCORRENCIA
+	toColumn: seg_tipo_ocorrencia.TIOC_ID_TIPO_OCORRENCIA

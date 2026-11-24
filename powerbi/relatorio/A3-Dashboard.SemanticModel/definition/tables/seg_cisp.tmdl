@@ -1,0 +1,56 @@
+table seg_cisp
+	lineageTag: 22505d52-7f1f-4543-970d-887663ac83e7
+
+	column CISP_ID_CISP
+		dataType: int64
+		formatString: 0
+		lineageTag: 13fe3da7-8d6d-4a40-b1dc-59dcaf3b1df2
+		summarizeBy: none
+		sourceColumn: CISP_ID_CISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column CISP_NR_CISP
+		dataType: int64
+		formatString: 0
+		lineageTag: ce2a818b-63d6-4577-89db-2310ccf4736d
+		summarizeBy: none
+		sourceColumn: CISP_NR_CISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column CISP_NM_CISP
+		dataType: string
+		lineageTag: 7516575a-3fcc-4514-9be0-e4747fcd68a0
+		summarizeBy: none
+		sourceColumn: CISP_NM_CISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column CISP_DS_UNIDADE_TERRITORIAL
+		dataType: string
+		lineageTag: 89c0c64a-0f75-45cd-b290-8853809904bb
+		summarizeBy: none
+		sourceColumn: CISP_DS_UNIDADE_TERRITORIAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column CISP_FL_SITUAC
+		dataType: string
+		lineageTag: c8f1fd27-e01e-4fdb-86bf-1c5ce1318000
+		summarizeBy: none
+		sourceColumn: CISP_FL_SITUAC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_cisp = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_cisp = Fonte{[Schema="seg_dashboard",Item="seg_cisp"]}[Data]
+				in
+				    seg_dashboard_seg_cisp
+
+	annotation PBI_ResultType = Table
+

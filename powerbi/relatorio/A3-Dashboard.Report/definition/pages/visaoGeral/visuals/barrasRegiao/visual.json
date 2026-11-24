@@ -1,0 +1,132 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "barrasRegiao",
+  "position": {
+    "x": 646,
+    "y": 200,
+    "z": 13000,
+    "height": 236,
+    "width": 610,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_regiao"
+                    }
+                  },
+                  "Property": "REGI_NM_REGIAO"
+                }
+              },
+              "queryRef": "seg_regiao.REGI_NM_REGIAO",
+              "nativeQueryRef": "REGI_NM_REGIAO",
+              "displayName": "Região"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Letalidade violenta (por sede)"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Letalidade violenta (por sede)",
+              "nativeQueryRef": "Letalidade violenta (por sede)",
+              "displayName": "Letalidade violenta"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "seg_ocorrencia_mensal"
+                  }
+                },
+                "Property": "Letalidade violenta (por sede)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Letalidade violenta por região'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Cada delegacia conta no seu município-sede'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

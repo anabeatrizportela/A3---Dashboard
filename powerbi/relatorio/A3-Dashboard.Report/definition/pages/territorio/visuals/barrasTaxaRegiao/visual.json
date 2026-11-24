@@ -1,0 +1,132 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "barrasTaxaRegiao",
+  "position": {
+    "x": 646,
+    "y": 456,
+    "z": 8000,
+    "height": 232,
+    "width": 610,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_regiao"
+                    }
+                  },
+                  "Property": "REGI_NM_REGIAO"
+                }
+              },
+              "queryRef": "seg_regiao.REGI_NM_REGIAO",
+              "nativeQueryRef": "REGI_NM_REGIAO",
+              "displayName": "Região"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Taxa de letalidade violenta (100 mil)"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Taxa de letalidade violenta (100 mil)",
+              "nativeQueryRef": "Taxa de letalidade violenta (100 mil)",
+              "displayName": "Letalidade / 100 mil"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "seg_ocorrencia_mensal"
+                  }
+                },
+                "Property": "Taxa de letalidade violenta (100 mil)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Taxa de letalidade violenta por região'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Por 100 mil habitantes'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

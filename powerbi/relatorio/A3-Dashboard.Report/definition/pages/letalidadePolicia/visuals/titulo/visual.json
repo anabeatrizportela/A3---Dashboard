@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "titulo",
+  "position": {
+    "x": 24,
+    "y": 8,
+    "z": 1000,
+    "height": 64,
+    "width": 760,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Criminalidade no Estado do Rio de Janeiro — 2025",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "20pt",
+                      "color": "#1F4E79"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Quem morre e o que a polícia faz? Composição da letalidade e produção policial",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "11pt",
+                      "color": "#52606D"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

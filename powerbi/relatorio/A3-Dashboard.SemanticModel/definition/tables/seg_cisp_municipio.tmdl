@@ -1,0 +1,49 @@
+table seg_cisp_municipio
+	lineageTag: 94ed247c-6990-47b0-9a94-6a8674e83540
+
+	column CIMU_ID_CISP_MUNICIPIO
+		dataType: int64
+		formatString: 0
+		lineageTag: 6428802a-0f56-4aac-9f97-7626bdb38747
+		summarizeBy: none
+		sourceColumn: CIMU_ID_CISP_MUNICIPIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column CISP_ID_CISP
+		dataType: int64
+		formatString: 0
+		lineageTag: a8d32315-afea-40d8-a3fe-f52c6a5b5ad3
+		summarizeBy: none
+		sourceColumn: CISP_ID_CISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column MUNI_ID_MUNICIPIO
+		dataType: int64
+		formatString: 0
+		lineageTag: bc2892ab-e440-47bd-983f-b9fd4bbe2283
+		summarizeBy: none
+		sourceColumn: MUNI_ID_MUNICIPIO
+
+		annotation SummarizationSetBy = Automatic
+
+	column CIMU_FL_SEDE
+		dataType: string
+		lineageTag: 632a708a-c2cc-4288-ac53-f042cc7377fb
+		summarizeBy: none
+		sourceColumn: CIMU_FL_SEDE
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_cisp_municipio = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_cisp_municipio = Fonte{[Schema="seg_dashboard",Item="seg_cisp_municipio"]}[Data]
+				in
+				    seg_dashboard_seg_cisp_municipio
+
+	annotation PBI_ResultType = Table
+

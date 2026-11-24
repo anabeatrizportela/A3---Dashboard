@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "rosquinhaCategoria",
+  "position": {
+    "x": 536,
+    "y": 542,
+    "z": 12000,
+    "height": 146,
+    "width": 720,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_categoria_ocorrencia"
+                    }
+                  },
+                  "Property": "CAOC_NM_CATEGORIA"
+                }
+              },
+              "queryRef": "seg_categoria_ocorrencia.CAOC_NM_CATEGORIA",
+              "nativeQueryRef": "CAOC_NM_CATEGORIA",
+              "displayName": "Categoria"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "seg_ocorrencia_mensal"
+                    }
+                  },
+                  "Property": "Ocorrencias"
+                }
+              },
+              "queryRef": "seg_ocorrencia_mensal.Ocorrencias",
+              "nativeQueryRef": "Ocorrencias",
+              "displayName": "Ocorrências"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Participação de cada categoria'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

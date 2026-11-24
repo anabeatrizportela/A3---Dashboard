@@ -1,0 +1,59 @@
+table seg_registro_mensal
+	lineageTag: 380dae7a-a4ac-477c-a767-dfcaea80cf28
+
+	column REME_ID_REGISTRO_MENSAL
+		dataType: int64
+		formatString: 0
+		lineageTag: a1e6bec3-665f-4468-b51d-2fa5bf7270b3
+		summarizeBy: none
+		sourceColumn: REME_ID_REGISTRO_MENSAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column CISP_ID_CISP
+		dataType: int64
+		formatString: 0
+		lineageTag: aa26c662-3d95-47c5-ae58-070c3b284547
+		summarizeBy: none
+		sourceColumn: CISP_ID_CISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column AISP_ID_AISP
+		dataType: int64
+		formatString: 0
+		lineageTag: fe62889a-5b35-47b7-a016-92280cdb87e0
+		summarizeBy: none
+		sourceColumn: AISP_ID_AISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column PERI_ID_PERIODO
+		dataType: int64
+		formatString: 0
+		lineageTag: fa229c6a-044a-4532-b4f7-2da77ec1dd72
+		summarizeBy: none
+		sourceColumn: PERI_ID_PERIODO
+
+		annotation SummarizationSetBy = Automatic
+
+	column REME_QT_REGISTRO_OCORRENCIAS
+		dataType: int64
+		formatString: 0
+		lineageTag: d1c942a1-cae5-4b52-9685-db39f6e0148c
+		summarizeBy: sum
+		sourceColumn: REME_QT_REGISTRO_OCORRENCIAS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_registro_mensal = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_registro_mensal = Fonte{[Schema="seg_dashboard",Item="seg_registro_mensal"]}[Data]
+				in
+				    seg_dashboard_seg_registro_mensal
+
+	annotation PBI_ResultType = Table
+

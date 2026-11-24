@@ -1,0 +1,39 @@
+table seg_regiao
+	lineageTag: 380fb60e-221c-40ab-9b91-a40d65caf7bf
+
+	column REGI_ID_REGIAO
+		dataType: int64
+		formatString: 0
+		lineageTag: f2d5e941-faac-47df-90ea-42fb2c07eaf3
+		summarizeBy: none
+		sourceColumn: REGI_ID_REGIAO
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGI_NM_REGIAO
+		dataType: string
+		lineageTag: 7fa318b9-ae8c-4268-9315-fe0fe94ce70b
+		summarizeBy: none
+		sourceColumn: REGI_NM_REGIAO
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGI_FL_SITUAC
+		dataType: string
+		lineageTag: 686e4b7b-829e-403c-82c1-3249034e94a7
+		summarizeBy: none
+		sourceColumn: REGI_FL_SITUAC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_regiao = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_regiao = Fonte{[Schema="seg_dashboard",Item="seg_regiao"]}[Data]
+				in
+				    seg_dashboard_seg_regiao
+
+	annotation PBI_ResultType = Table
+

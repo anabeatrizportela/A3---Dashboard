@@ -1,0 +1,39 @@
+table seg_categoria_ocorrencia
+	lineageTag: 512c9ad1-72a9-4461-bc81-6737d9a08ee2
+
+	column CAOC_ID_CATEGORIA_OCORRENCIA
+		dataType: int64
+		formatString: 0
+		lineageTag: 9aea0d48-509c-48d3-9668-0b570f8342aa
+		summarizeBy: none
+		sourceColumn: CAOC_ID_CATEGORIA_OCORRENCIA
+
+		annotation SummarizationSetBy = Automatic
+
+	column CAOC_NM_CATEGORIA
+		dataType: string
+		lineageTag: a8e86db5-c4a5-424d-81f5-8d85035fba9c
+		summarizeBy: none
+		sourceColumn: CAOC_NM_CATEGORIA
+
+		annotation SummarizationSetBy = Automatic
+
+	column CAOC_FL_SITUAC
+		dataType: string
+		lineageTag: 301da117-95e2-4267-b7ae-e1ee43ddcb8f
+		summarizeBy: none
+		sourceColumn: CAOC_FL_SITUAC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_categoria_ocorrencia = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_categoria_ocorrencia = Fonte{[Schema="seg_dashboard",Item="seg_categoria_ocorrencia"]}[Data]
+				in
+				    seg_dashboard_seg_categoria_ocorrencia
+
+	annotation PBI_ResultType = Table
+

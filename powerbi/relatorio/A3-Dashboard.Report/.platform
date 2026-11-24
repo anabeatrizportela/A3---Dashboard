@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "A3-Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ee69ce42-0bcb-4c9a-97ed-62f3dd2e3b10"
+  }
+}

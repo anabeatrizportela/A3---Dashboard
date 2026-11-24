@@ -1,0 +1,56 @@
+table seg_risp
+	lineageTag: dc46aae1-c3a5-4bc7-95ff-793b7f74b0ea
+
+	column RISP_ID_RISP
+		dataType: int64
+		formatString: 0
+		lineageTag: 9381ac27-23e5-425a-a16c-a2e8eddc691f
+		summarizeBy: none
+		sourceColumn: RISP_ID_RISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column RISP_NR_RISP
+		dataType: int64
+		formatString: 0
+		lineageTag: 0d13eea5-f6e3-46c9-936d-62c8d8ca013b
+		summarizeBy: none
+		sourceColumn: RISP_NR_RISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column RISP_NM_RISP
+		dataType: string
+		lineageTag: 5b55b04f-1c07-4721-b31c-0c9a31e37f17
+		summarizeBy: none
+		sourceColumn: RISP_NM_RISP
+
+		annotation SummarizationSetBy = Automatic
+
+	column RISP_DS_AREA
+		dataType: string
+		lineageTag: 8b2490df-c60d-4883-b67e-e2ce6dcdbbed
+		summarizeBy: none
+		sourceColumn: RISP_DS_AREA
+
+		annotation SummarizationSetBy = Automatic
+
+	column RISP_FL_SITUAC
+		dataType: string
+		lineageTag: 00589878-d051-474c-9fa0-5f835186e24f
+		summarizeBy: none
+		sourceColumn: RISP_FL_SITUAC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition seg_risp = m
+		mode: import
+		source =
+				let
+				    Fonte = MySQL.Database("localhost:3306", "seg_dashboard", [ReturnSingleDatabase=true]),
+				    seg_dashboard_seg_risp = Fonte{[Schema="seg_dashboard",Item="seg_risp"]}[Data]
+				in
+				    seg_dashboard_seg_risp
+
+	annotation PBI_ResultType = Table
+

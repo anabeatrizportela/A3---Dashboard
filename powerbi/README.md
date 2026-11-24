@@ -4,6 +4,8 @@ O que fica aqui: as medidas DAX e o tema visual. O arquivo `.pbix` em si não en
 
 ```
 powerbi/
+├── relatorio/
+│   └── A3-Dashboard.pbip    a dashboard pronta, em formato texto (modelo + 4 páginas)
 ├── dax/
 │   ├── 00_base.dax         medida base e regras de negócio do somatório
 │   ├── 10_kpis.dax          um indicador por medida
@@ -13,6 +15,17 @@ powerbi/
 └── tema/
     └── tema-a3-criminalidade-rj.json
 ```
+
+## Abrir a dashboard pronta
+
+A dashboard já montada está em `relatorio/`, como projeto do Power BI (`.pbip`): o mesmo conteúdo de um `.pbix`, só que em arquivos de texto que o git versiona e compara.
+
+1. Subir o banco e passar o QA ([`sql/RUNBOOK.md`](../sql/RUNBOOK.md)), com o MySQL do XAMPP ligado.
+2. Dar dois cliques em `relatorio/A3-Dashboard.pbip`.
+3. `Página Inicial` → `Atualizar`. O projeto abre sem dados: eles vêm do banco de cada um, não do repositório. Se o Power BI pedir credencial, usar a aba `Banco de dados` com o usuário do MySQL.
+4. Ao mudar algo, salvar com `Ctrl+S` e fazer commit da pasta `relatorio/`. A pasta `.pbi/` que o Power BI cria lá dentro (cache de dados e preferências locais) fica fora do git.
+
+No projeto as tabelas já estão com o nome curto (`seg_ocorrencia_mensal`), as 52 medidas de `dax/` estão nas pastas de exibição, a `seg_periodo` está marcada como tabela de datas e o tema está aplicado. Os passos abaixo continuam valendo para quem quiser montar do zero ou entender o que o projeto faz.
 
 ## Antes de começar
 
