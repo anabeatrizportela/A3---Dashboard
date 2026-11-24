@@ -1,0 +1,124 @@
+// =========================================================================
+// PROJETO : A3 - Dashboard Criminalidade no Estado do Rio de Janeiro (2025)
+// ARQUIVO : 30_territorio.dax
+// CAMADA  : Territorio - somas por municipio e regiao sem duplicar
+// PASTA   : 30 Territorio   (Display folder no Power BI)
+//
+// PRE-REQUISITO
+//   Migracao sql/migrations/03_02_CISP_MUNICIPIO_SEDE.sql aplicada.
+//
+// QUANDO USAR O QUE
+//
+//   Eixo do visual          Medida
+//   ----------------------  ----------------------------------------------
+//   Delegacia (CISP)        [Ocorrencias], [Letalidade violenta], ...
+//   AISP ou RISP            [Ocorrencias], [Letalidade violenta], ...
+//   Municipio ou Regiao     as medidas "(por sede)" deste arquivo
+//
+//   O territorio POLICIAL (RISP > AISP > CISP) e uma hierarquia limpa: cada
+//   delegacia pertence a uma AISP e uma AISP a uma RISP. Somar por ali nunca
+//   duplica e nao precisa de medida especial.
+//
+//   O territorio CIVIL (Regiao > Municipio) chega pela ponte
+//   seg_cisp_municipio, que e muitos-para-muitos: 9 delegacias atendem mais
+//   de um municipio. Sem filtrar a sede, a mesma ocorrencia e contada em cada
+//   municipio atendido - a letalidade por regiao vira 4.075 em vez de 3.892.
+// =========================================================================
+
+
+// -------------------------------------------------------------------------
+// Somas seguras por municipio / regiao
+//
+// CIMU_FL_SEDE = "S" deixa exatamente uma linha de ponte por delegacia,
+// entao cada ocorrencia e atribuida a um unico municipio: o da sede.
+// -------------------------------------------------------------------------
+Ocorrencias (por sede) =
+CALCULATE (
+	[Ocorrencias],
+	seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+)
+
+Letalidade violenta (por sede) =
+CALCULATE (
+	[Letalidade violenta],
+	seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+)
+
+Roubos (por sede) =
+CALCULATE (
+	[Roubos],
+	seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+)
+
+Furtos (por sede) =
+CALCULATE (
+	[Furtos],
+	seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+)
+
+Total de BOs (por sede) =
+CALCULATE (
+	[Total de BOs],
+	seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+)
+
+
+// -------------------------------------------------------------------------
+// Diagnostico - quanto a ponte duplicaria
+//
+// Nao vai para a dashboard final; serve para provar na apresentacao que a
+// correcao e necessaria e para pegar regressao se alguem mexer na ponte.
+// Esperado no estado inteiro: 183.
+// -------------------------------------------------------------------------
+Letalidade violenta (duplicacao da ponte) =
+VAR SemFiltro = [Letalidade violenta]
+VAR ComSede = [Letalidade violenta (por sede)]
+RETURN
+	SemFiltro - ComSede
+
+
+// -------------------------------------------------------------------------
+// Ranking de delegacias (top 10 da pagina 1)
+//
+// Posicao calculada sobre o conjunto visivel, nao sobre as 137 fixas: com um
+// filtro de RISP ativo, o ranking passa a ser daquela RISP.
+// -------------------------------------------------------------------------
+Posicao da delegacia (letalidade) =
+IF (
+	NOT ISBLANK ( [Letalidade violenta] ),
+	RANKX (
+		ALLSELECTED ( seg_cisp[CISP_NM_CISP] ),
+		[Letalidade violenta],
+		,
+		DESC,
+		DENSE
+	)
+)
+
+// Para o visual "Top 10": filtrar por esta medida = 1 em vez de usar o
+// Top N do painel de filtros, que nao respeita medida calculada em alguns
+// visuais e quebra o drill-down.
+Esta no top 10 (letalidade) =
+IF ( [Posicao da delegacia (letalidade)] <= 10, 1, 0 )
+
+
+// -------------------------------------------------------------------------
+// Perfil de crime da regiao (pergunta 3 do plano)
+//
+// Quanto da criminalidade da area e patrimonial (roubo + furto + outros
+// patrimoniais) contra o resto. Responde "mais patrimonial ou mais violento"
+// com um numero em vez de dois graficos lado a lado.
+// -------------------------------------------------------------------------
+% Crime patrimonial =
+VAR Patrimonial =
+	CALCULATE (
+		[Ocorrencias],
+		KEEPFILTERS (
+			seg_categoria_ocorrencia[CAOC_NM_CATEGORIA]
+				IN { "Roubos", "Furtos", "Outros crimes patrimoniais" }
+		)
+	)
+VAR Tudo =
+	CALCULATE ( [Ocorrencias], REMOVEFILTERS ( seg_categoria_ocorrencia ) )
+RETURN
+	DIVIDE ( Patrimonial, Tudo )

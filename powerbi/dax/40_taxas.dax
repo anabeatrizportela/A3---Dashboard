@@ -1,0 +1,104 @@
+// =========================================================================
+// PROJETO : A3 - Dashboard Criminalidade no Estado do Rio de Janeiro (2025)
+// ARQUIVO : 40_taxas.dax
+// CAMADA  : Taxas - numeros comparaveis entre municipios de tamanhos diferentes
+// PASTA   : 40 Taxas   (Display folder no Power BI)
+//
+// PRE-REQUISITO
+//   Migracao sql/migrations/03_04_MUNICIPIO_POPULACAO.sql aplicada E o seed
+//   de populacao do IBGE carregado (scripts/gerar_populacao_ibge.py).
+//   Sem populacao, DIVIDE devolve vazio e os cartoes ficam em branco - de
+//   proposito, para nunca exibir taxa sobre populacao parcial.
+//
+// POR QUE AS TAXAS IMPORTAM
+//   Em numero absoluto a Capital lidera tudo: tem 6,2 milhoes de habitantes.
+//   A taxa por 100 mil e o que permite dizer se morar em Japeri e mais
+//   perigoso do que morar em Niteroi. Toda taxa aqui usa as medidas
+//   "(por sede)" de 30_territorio.dax, senao numerador e denominador
+//   contariam municipios diferentes.
+// =========================================================================
+
+
+// -------------------------------------------------------------------------
+// Denominadores
+// -------------------------------------------------------------------------
+
+// Soma simples da dimensao de municipio. Correta quando o visual e filtrado
+// por municipio ou regiao (o caso de toda taxa).
+Populacao =
+SUM ( seg_municipio[MUNI_QT_POPULACAO] )
+
+// Mesma populacao, mas chegando pela ponte de sede - necessaria quando o
+// eixo do visual e a delegacia, a AISP ou a RISP: sem o filtro de sede, um
+// municipio atendido por duas delegacias entraria duas vezes no denominador.
+Populacao (por sede) =
+CALCULATE (
+	[Populacao],
+	seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+)
+
+// Honestidade do denominador: quantos municipios do contexto ainda estao sem
+// populacao carregada. Colocar junto da taxa na pagina "Sobre"; se vier
+// maior que zero, a taxa exibida cobre menos gente do que parece.
+Municipios sem populacao =
+CALCULATE (
+	COUNTROWS ( seg_municipio ),
+	ISBLANK ( seg_municipio[MUNI_QT_POPULACAO] )
+)
+
+
+// -------------------------------------------------------------------------
+// Taxas por 100 mil habitantes
+//
+// Padrao: DIVIDE ( <KPI por sede>, <populacao por sede> ) * 100000
+// O ano de referencia da populacao esta em seg_municipio[MUNI_AA_POPULACAO] e
+// tem de aparecer na nota metodologica do rodape.
+// -------------------------------------------------------------------------
+
+Taxa de letalidade violenta (100 mil) =
+DIVIDE (
+	[Letalidade violenta (por sede)],
+	[Populacao (por sede)]
+) * 100000
+
+Taxa de roubos (100 mil) =
+DIVIDE (
+	[Roubos (por sede)],
+	[Populacao (por sede)]
+) * 100000
+
+Taxa de furtos (100 mil) =
+DIVIDE (
+	[Furtos (por sede)],
+	[Populacao (por sede)]
+) * 100000
+
+Taxa de BOs (100 mil) =
+DIVIDE (
+	[Total de BOs (por sede)],
+	[Populacao (por sede)]
+) * 100000
+
+
+// -------------------------------------------------------------------------
+// Comparacao com o estado
+//
+// Diz se a area filtrada esta acima ou abaixo da media do RJ. Resolve a
+// pergunta que o numero absoluto nao responde: "isso e muito?".
+// ALLSELECTED preserva o filtro de mes, entao a comparacao e do mesmo periodo.
+// -------------------------------------------------------------------------
+Taxa de letalidade do estado (100 mil) =
+CALCULATE (
+	[Taxa de letalidade violenta (100 mil)],
+	REMOVEFILTERS ( seg_municipio ),
+	REMOVEFILTERS ( seg_regiao ),
+	REMOVEFILTERS ( seg_cisp ),
+	REMOVEFILTERS ( seg_aisp ),
+	REMOVEFILTERS ( seg_risp )
+)
+
+Letalidade vs estado =
+VAR Local = [Taxa de letalidade violenta (100 mil)]
+VAR Estado = [Taxa de letalidade do estado (100 mil)]
+RETURN
+	DIVIDE ( Local - Estado, Estado )

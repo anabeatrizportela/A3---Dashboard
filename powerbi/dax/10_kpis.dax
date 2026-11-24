@@ -1,0 +1,181 @@
+// =========================================================================
+// PROJETO : A3 - Dashboard Criminalidade no Estado do Rio de Janeiro (2025)
+// ARQUIVO : 10_kpis.dax
+// CAMADA  : KPI - um indicador por medida, sempre o mesmo padrao
+// PASTA   : 10 KPIs   (Display folder no Power BI)
+//
+// O PADRAO (vale para toda medida deste arquivo)
+//
+//   <Nome do KPI> =
+//   CALCULATE (
+//       [_Ocorrencias brutas],
+//       REMOVEFILTERS ( seg_tipo_ocorrencia ),       // 1
+//       REMOVEFILTERS ( seg_categoria_ocorrencia ),  // 1
+//       <filtro do proprio indicador>                // 2
+//   )
+//
+//   1. O cartao de KPI do topo e FIXO: letalidade continua sendo letalidade
+//      mesmo com "Roubos" escolhido no segmentador de categoria. Limpar as
+//      duas dimensoes de crime garante isso. Mes, regiao, RISP, AISP e
+//      delegacia continuam filtrando normalmente, porque sao outras tabelas.
+//   2. Partir de [_Ocorrencias brutas], e nao de [Ocorrencias], porque
+//      metade destes KPIs E um tipo agregado - [Ocorrencias] os excluiria e o
+//      cartao mostraria zero.
+//
+//   Para um visual que DEVE obedecer ao segmentador de categoria (barras por
+//   categoria, arvore, matriz), usar [Ocorrencias] de 00_base.dax, nunca
+//   estas medidas.
+//
+// DAX nao tem funcao de usuario, entao "reaproveitar" aqui quer dizer repetir
+// o mesmo padrao, na mesma ordem, com o nome do tipo como unica diferenca.
+// Quem le uma medida leu todas.
+// =========================================================================
+
+
+// -------------------------------------------------------------------------
+// Os 6 cartoes do topo da pagina 1
+// -------------------------------------------------------------------------
+
+// Tipo agregado: a propria base do ISP fecha letalidade violenta como
+// hom_doloso + lesao_corp_morte + latrocinio + hom_por_interv_policial
+// + feminicidio. Esperado em 2025: 3.892.
+Letalidade violenta =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "letalidade_violenta"
+)
+
+// Esperado em 2025: 800 (20,6% da letalidade violenta).
+Mortes por intervencao do Estado =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "hom_por_interv_policial"
+)
+
+// Categoria inteira, sem agregado: a categoria Roubos nao tem um tipo
+// "total_roubos", entao aqui soma-se os 13 tipos. Esperado em 2025: 98.459.
+Roubos =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_categoria_ocorrencia[CAOC_NM_CATEGORIA] = "Roubos",
+	seg_tipo_ocorrencia[TIOC_FL_AGREGADO] = "N"
+)
+
+// Tipo agregado: usa total_furtos, que a base ja fecha. Somar a categoria
+// Furtos com o agregado dentro daria 376.530. Esperado em 2025: 187.984.
+Furtos =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "total_furtos"
+)
+
+// Esperado em 2025: 146.981.
+Estelionato =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "estelionato"
+)
+
+// [Total de BOs] e o sexto cartao e esta em 00_base.dax, porque vem de outra
+// tabela de fato.
+
+
+// -------------------------------------------------------------------------
+// Letalidade em detalhe (pagina 4)
+// -------------------------------------------------------------------------
+
+// CORRIGE A MEDIDA DO GUIA (armadilha 2 do plano).
+// Nesta base o homicidio doloso NAO inclui feminicidio - a prova e que
+// 2.844 + 77 + 66 + 800 + 105 fecha exatamente a letalidade violenta (3.892).
+// O CVLI do guia, sem feminicidio, perde 105 mortes (2.987 em vez de 3.092).
+CVLI =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA]
+		IN { "hom_doloso", "lesao_corp_morte", "latrocinio", "feminicidio" }
+)
+
+Homicidio doloso =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "hom_doloso"
+)
+
+// Percentual da letalidade que vem de acao policial. DIVIDE devolve vazio
+// quando o denominador e zero, entao o cartao fica em branco em vez de erro.
+% Letalidade por intervencao =
+DIVIDE ( [Mortes por intervencao do Estado], [Letalidade violenta] )
+
+
+// -------------------------------------------------------------------------
+// Crimes contra a mulher (painel da pagina 3)
+// -------------------------------------------------------------------------
+
+// Esperado em 2025: 105.
+Feminicidio =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "feminicidio"
+)
+
+Tentativa de feminicidio =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "tentativa_feminicidio"
+)
+
+// Esperado em 2025: 5.867.
+Estupro =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "estupro"
+)
+
+
+// -------------------------------------------------------------------------
+// Atividade policial em detalhe (pagina 4)
+// -------------------------------------------------------------------------
+
+Prisoes em flagrante =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "apf"
+)
+
+Mandados de prisao cumpridos =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "cmp"
+)
+
+Veiculos recuperados =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_tipo_ocorrencia[TIOC_CD_TIPO_OCORRENCIA] = "recuperacao_veiculos"
+)

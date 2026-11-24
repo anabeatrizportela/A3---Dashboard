@@ -1,0 +1,149 @@
+// =========================================================================
+// PROJETO : A3 - Dashboard Criminalidade no Estado do Rio de Janeiro (2025)
+// ARQUIVO : 20_tempo.dax
+// CAMADA  : Tempo - variacao mes a mes dos KPIs
+// PASTA   : 20 Tempo   (Display folder no Power BI)
+//
+// PRE-REQUISITO
+//   Migracao sql/migrations/03_03_PERIODO_DATA_REFERENCIA.sql aplicada e
+//   seg_periodo marcada como tabela de datas por PERI_DT_REFERENCIA.
+//   Sem isso, PREVIOUSMONTH devolve erro.
+//
+// POR QUE SEG_PERIODO E NAO UMA dCalendario
+//   O fato ja e mensal e ja se liga a seg_periodo. Uma tabela de calendario
+//   paralela acrescentaria um relacionamento e um risco de granularidade
+//   divergente sem resolver nada.
+//
+// O PADRAO (duas medidas por KPI)
+//   <KPI> (mes anterior) = CALCULATE ( [<KPI>], PREVIOUSMONTH ( ... ) )
+//   <KPI> (variacao %)   = DIVIDE ( atual - anterior, anterior )
+//
+//   A variacao usa VAR para ler o mes anterior UMA vez. Escrever
+//   DIVIDE([KPI] - [KPI (mes anterior)], [KPI (mes anterior)]) avalia a
+//   medida duas vezes - mesmo resultado, o dobro do trabalho.
+//
+// ALTERNATIVA MAIS ENXUTA (opcional)
+//   Estas 12 medidas sao o mesmo calculo repetido. Um CALCULATION GROUP
+//   "Tempo" com os itens "Valor", "Mes anterior" e "Variacao %" usando
+//   SELECTEDMEASURE() substitui todas elas por 3 definicoes e vale para
+//   qualquer KPI novo sem escrever mais nada. Exige o Tabular Editor
+//   (gratuito), que nao e pre-requisito do trabalho - por isso o caminho
+//   padrao aqui e explicito. Ver powerbi/README.md.
+// =========================================================================
+
+
+// -------------------------------------------------------------------------
+// Letalidade violenta
+// -------------------------------------------------------------------------
+Letalidade violenta (mes anterior) =
+CALCULATE (
+	[Letalidade violenta],
+	PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+)
+
+Letalidade violenta (variacao %) =
+VAR Atual = [Letalidade violenta]
+VAR Anterior = [Letalidade violenta (mes anterior)]
+RETURN
+	DIVIDE ( Atual - Anterior, Anterior )
+
+
+// -------------------------------------------------------------------------
+// Mortes por intervencao do Estado
+// -------------------------------------------------------------------------
+Mortes por intervencao do Estado (mes anterior) =
+CALCULATE (
+	[Mortes por intervencao do Estado],
+	PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+)
+
+Mortes por intervencao do Estado (variacao %) =
+VAR Atual = [Mortes por intervencao do Estado]
+VAR Anterior = [Mortes por intervencao do Estado (mes anterior)]
+RETURN
+	DIVIDE ( Atual - Anterior, Anterior )
+
+
+// -------------------------------------------------------------------------
+// Roubos
+// -------------------------------------------------------------------------
+Roubos (mes anterior) =
+CALCULATE (
+	[Roubos],
+	PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+)
+
+Roubos (variacao %) =
+VAR Atual = [Roubos]
+VAR Anterior = [Roubos (mes anterior)]
+RETURN
+	DIVIDE ( Atual - Anterior, Anterior )
+
+
+// -------------------------------------------------------------------------
+// Furtos
+// -------------------------------------------------------------------------
+Furtos (mes anterior) =
+CALCULATE (
+	[Furtos],
+	PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+)
+
+Furtos (variacao %) =
+VAR Atual = [Furtos]
+VAR Anterior = [Furtos (mes anterior)]
+RETURN
+	DIVIDE ( Atual - Anterior, Anterior )
+
+
+// -------------------------------------------------------------------------
+// Estelionato
+// -------------------------------------------------------------------------
+Estelionato (mes anterior) =
+CALCULATE (
+	[Estelionato],
+	PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+)
+
+Estelionato (variacao %) =
+VAR Atual = [Estelionato]
+VAR Anterior = [Estelionato (mes anterior)]
+RETURN
+	DIVIDE ( Atual - Anterior, Anterior )
+
+
+// -------------------------------------------------------------------------
+// Total de BOs
+// -------------------------------------------------------------------------
+Total de BOs (mes anterior) =
+CALCULATE (
+	[Total de BOs],
+	PREVIOUSMONTH ( seg_periodo[PERI_DT_REFERENCIA] )
+)
+
+Total de BOs (variacao %) =
+VAR Atual = [Total de BOs]
+VAR Anterior = [Total de BOs (mes anterior)]
+RETURN
+	DIVIDE ( Atual - Anterior, Anterior )
+
+
+// -------------------------------------------------------------------------
+// Apoio ao grafico de linhas da pagina 1
+// -------------------------------------------------------------------------
+
+// Rotula so o mes de pico da serie, para a anotacao do grafico (out/2025,
+// 431 mortes) acompanhar o filtro em vez de ser um texto fixo na tela.
+Rotulo do pico de letalidade =
+VAR MesesVisiveis = ALLSELECTED ( seg_periodo[PERI_DT_REFERENCIA] )
+VAR MaiorValor =
+	MAXX ( MesesVisiveis, [Letalidade violenta] )
+RETURN
+	IF ( [Letalidade violenta] = MaiorValor, [Letalidade violenta] )
+
+// Media mensal do periodo filtrado, para a linha de referencia do grafico.
+Letalidade violenta (media mensal) =
+AVERAGEX (
+	VALUES ( seg_periodo[PERI_DT_REFERENCIA] ),
+	[Letalidade violenta]
+)

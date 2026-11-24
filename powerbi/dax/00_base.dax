@@ -1,0 +1,90 @@
+// =========================================================================
+// PROJETO : A3 - Dashboard Criminalidade no Estado do Rio de Janeiro (2025)
+// ARQUIVO : 00_base.dax
+// CAMADA  : Base - a unica camada que le a tabela de fato diretamente
+// PASTA   : 00 Base   (Display folder no Power BI)
+//
+// REGRA DA CAMADA
+//   Nenhuma medida de outro arquivo escreve SUM(seg_ocorrencia_mensal[...]).
+//   Todas partem de [_Ocorrencias brutas] ou de [Ocorrencias]. Se a regra de
+//   negocio mudar (um novo tipo agregado, outra categoria a excluir), muda
+//   aqui e em lugar nenhum mais.
+// =========================================================================
+
+
+// -------------------------------------------------------------------------
+// [_Ocorrencias brutas] - OCULTAR esta medida no modelo
+//
+// Soma crua, sem nenhuma regra de negocio. Existe para que as medidas de KPI
+// possam montar o proprio contexto de filtro do zero (com REMOVEFILTERS) sem
+// herdar a exclusao de agregados de [Ocorrencias], que para elas seria errada.
+// Nao usar em visual nenhum: sozinha, ela conta crime em dobro.
+// -------------------------------------------------------------------------
+_Ocorrencias brutas =
+SUM ( seg_ocorrencia_mensal[OCME_QT_OCORRENCIA] )
+
+
+// -------------------------------------------------------------------------
+// [Ocorrencias] - medida base de TODO somatorio de criminalidade
+//
+// Aplica as duas regras de negocio do modelo:
+//   1. TIOC_FL_AGREGADO = "N"  ........ exclui letalidade_violenta e
+//      total_furtos, que sao totais de outros tipos (armadilha 1 do plano).
+//   2. categoria <> "Atividade policial" ... prisao em flagrante, mandado e
+//      recuperacao de veiculo medem producao da policia, nao crime.
+//
+// POR QUE KEEPFILTERS (diferenca em relacao a medida do guia)
+//   Um argumento de filtro do CALCULATE SUBSTITUI o filtro que o usuario
+//   colocou naquela coluna. Sem KEEPFILTERS, o segmentador de categoria
+//   deixaria de funcionar: escolher "Roubos" devolveria todas as categorias
+//   menos "Atividade policial". Com KEEPFILTERS os dois filtros se somam.
+// -------------------------------------------------------------------------
+Ocorrencias =
+CALCULATE (
+	[_Ocorrencias brutas],
+	KEEPFILTERS ( seg_tipo_ocorrencia[TIOC_FL_AGREGADO] = "N" ),
+	KEEPFILTERS ( seg_categoria_ocorrencia[CAOC_NM_CATEGORIA] <> "Atividade policial" )
+)
+
+
+// -------------------------------------------------------------------------
+// [Atividade policial] - o que [Ocorrencias] deixa de fora, de proposito
+//
+// Para a pagina 4, que mede producao da policia. Separada em medida propria
+// justamente para nunca entrar em um total de criminalidade por descuido.
+// -------------------------------------------------------------------------
+Atividade policial =
+CALCULATE (
+	[_Ocorrencias brutas],
+	REMOVEFILTERS ( seg_tipo_ocorrencia ),
+	REMOVEFILTERS ( seg_categoria_ocorrencia ),
+	seg_categoria_ocorrencia[CAOC_NM_CATEGORIA] = "Atividade policial",
+	seg_tipo_ocorrencia[TIOC_FL_AGREGADO] = "N"
+)
+
+
+// -------------------------------------------------------------------------
+// [Total de BOs] - fato de granularidade delegacia x mes
+//
+// Vem de SEG_REGISTRO_MENSAL, nao da tabela de ocorrencias: um BO pode
+// registrar mais de um crime, entao este numero nao e a soma dos tipos.
+// Valor esperado em 2025: 965.208.
+// -------------------------------------------------------------------------
+Total de BOs =
+SUM ( seg_registro_mensal[REME_QT_REGISTRO_OCORRENCIAS] )
+
+
+// -------------------------------------------------------------------------
+// [Qtd delegacias] / [Qtd municipios] - denominadores de contexto
+//
+// Uteis em titulo dinamico ("12 delegacias selecionadas") e para detectar
+// filtro acidental em visual que deveria mostrar o estado inteiro.
+// -------------------------------------------------------------------------
+Qtd delegacias =
+DISTINCTCOUNT ( seg_registro_mensal[CISP_ID_CISP] )
+
+Qtd municipios =
+CALCULATE (
+	DISTINCTCOUNT ( seg_cisp_municipio[MUNI_ID_MUNICIPIO] ),
+	seg_cisp_municipio[CIMU_FL_SEDE] = "S"
+)
